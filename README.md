@@ -12,8 +12,53 @@ but I also uploaded `dev` directory for the developer.
 ---
 
 ## How to use / 사용 방법
-Paste files in `patch` directory and translate.db into root directory directory `openBatoru` 
+Paste files in `patch` directory and `translate.db` into root directory directory `openBatoru` 
 Then, execute `run.vbs`
 
 `patch` 디렉토리의 파일들과 translate.db `openBatoru`의 최상위 디렉토리에 붙여넣기합니다.
 그리고 `run.vbs`를 실행합니다.
+
+---
+## translate.db
+`translate.db` is `sqlite` database for manage translate text
+but `translate.db` is not prepared yet
+If you need translate.db, you can create `translate` table with below query
+
+``` sql
+CREATE TABLE translate (
+    imageSet TEXT PRIMARY KEY,
+    Name TEXT,
+    description TEXT,
+    status INTEGER
+);
+```
+|field|description|
+|------|----------------|
+|imageSet|imageSet text|
+|Name|translated Name text|
+|description|translated effect description text|
+|status|Status flag. Don't apply translation if status is 0 |
+
+
+`translate.db`은 번역된 텍스트를 다루기 위한 sqlite 데이터베이스입니다.
+하지만 `translate.db`는 아직 준비되지 않았습니다. 
+만약 `translate.db`가 필요하다면, 아래의 쿼리로 `translate` 테이블을 생성하면 됩니다.
+
+``` sql
+CREATE TABLE translate (
+    imageSet TEXT PRIMARY KEY,
+    Name TEXT,
+    description TEXT,
+    status INTEGER
+);
+```
+|필드|설명|
+|------|----------------|
+|imageSet|imageSet 텍스트|
+|Name|번역된 이름 텍스트 |
+|description|번역된 효과 설명 텍스트|
+|status|상태 플래그, status가 0이라면 번역을 적용하지 않음. |
+
+
+## LICENSE / 라이선스
+MIT LICENSE
