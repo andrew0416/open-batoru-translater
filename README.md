@@ -41,7 +41,7 @@ CREATE TABLE translate (
 |description|translated effect description text|
 |status|Status flag. Don't apply translation if status is 0 |
 
-
+<br/>
 
 `translate.db`은 번역된 텍스트를 다루기 위한 sqlite 데이터베이스입니다.<br/>
 하지만 `translate.db`은 아직 준비되지 않았습니다. <br/>
