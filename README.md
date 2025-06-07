@@ -17,7 +17,7 @@ Paste files in `patch` directory and `translate.db` into root directory director
 Then, execute `run.vbs`<br/>
 
 
-`patch` 디렉토리의 파일들과 translate.db `openBatoru`의 최상위 디렉토리에 붙여넣기합니다.<br/>
+`patch` 디렉토리의 파일들과 `translate.db`를 `openBatoru`의 최상위 디렉토리에 붙여넣기합니다.<br/>
 그리고 `run.vbs`를 실행합니다.<br/>
 
 ---
