@@ -23,13 +23,18 @@ How it works:
 2. LAUNCH_t.bat runs translate-updater.ps1.
 3. translate-updater.ps1 reads translate-source.json.
 4. It downloads translate-manifest.json from GitHub.
-5. If the manifest version or sha256 differs from the local state, it downloads
-   translate.db.
+5. If the manifest sha256 differs from the local translate.db sha256, it
+   downloads translate.db.
 6. The old local translate.db is backed up as translate.db.bak.
 7. OpenBatoru.jar starts normally.
 
 If the network is unavailable, the manifest is not ready, or the download fails,
 the game still starts with the existing translate.db.
+
+Troubleshooting:
+
+Check translate-updater.log next to LAUNCH_t.bat. It records the manifest URL,
+local database path, local sha256, remote sha256, and any download error.
 
 Changing language/source:
 
