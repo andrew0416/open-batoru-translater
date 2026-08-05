@@ -1,4 +1,9 @@
 @echo off
+setlocal
+set "PATCH_DIR=%~dp0"
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%PATCH_DIR%translate-updater.ps1"
+
 "./jdk/bin/java" ^
 -javaagent:"agent.jar" ^
 -Dprism.forceGPU=true ^
