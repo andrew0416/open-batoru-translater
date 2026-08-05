@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "mode": "manifest",
+  "manifestUrl": "https://raw.githubusercontent.com/andrew0416/open-batoru-translation-ko/main/translate-manifest.json",
+  "databasePath": "translate.db",
+  "timeoutSeconds": 20,
+  "keepBackup": true
+}
