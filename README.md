@@ -44,8 +44,9 @@ CREATE TABLE translate (
 <br/>
 
 `translate.db`은 번역된 텍스트를 다루기 위한 sqlite 데이터베이스입니다.<br/>
-하지만 `translate.db`은 아직 준비되지 않았습니다. <br/>
-만약 `translate.db`가 필요하다면, 아래의 쿼리로 `translate` 테이블을 생성하면 됩니다.<br/>
+https://github.com/andrew0416/open-batoru-translation-ko<br/>
+위의 주소에서 한국어버전 `translate.db`를 다운받을 수 있습니다. <br/>
+만약 다른 버전의 `translate.db`가 필요하다면, 아래의 쿼리로 `translate` 테이블을 생성할 수 있습니다.<br/>
 
 ``` sql
 CREATE TABLE translate (
@@ -64,9 +65,25 @@ CREATE TABLE translate (
 
 
 ## 자동 업데이트 
-현재 자동업데이트 기능을 패치중입니다.
-https://github.com/andrew0416/open-batoru-translation-ko
-이쪽을 참조
+현재의 translate.db는 자동 업데이트 기능이 적용되어 자동적으로 한국어 DB를 적용합니다.<br/>
+자동 업데이트를 사용하고싶지 않다면<br/>
+`translate.db.update.json`에 `"enabled": false`를 적용하면 됩니다.<br/>
+
+``` json
+{
+  "enabled": false,
+  "mode": "manifest",
+  "manifestUrl": "https://raw.githubusercontent.com/andrew0416/open-batoru-translation-ko/main/translate-manifest.json",
+  "databasePath": "translate.db",
+  "timeoutSeconds": 20,
+  "keepBackup": true
+}
+```
+
+다른 언어로 자동업데이트를 사용하고 싶다면<br/>
+https://github.com/andrew0416/open-batoru-translation-ko 를 참조하여 업데이트 레포지토리를 생성하고.<br/>
+`manifestUrl`의 주소를 해당 레포지토리의 주소로 교체합니다.<br/>
+
 
 ## LICENSE / 라이선스
 MIT LICENSE<br/>
