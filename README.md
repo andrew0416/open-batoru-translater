@@ -63,5 +63,9 @@ CREATE TABLE translate (
 |status|상태 플래그, status가 0이라면 번역을 적용하지 않음. |
 
 
+## 현재 자동업데이트 기능을 패치중입니다.
+https://github.com/andrew0416/open-batoru-translation-ko
+이쪽을 참조
+
 ## LICENSE / 라이선스
 MIT LICENSE<br/>
