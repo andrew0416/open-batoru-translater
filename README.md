@@ -63,6 +63,7 @@ CREATE TABLE translate (
 |description|번역된 효과 설명 텍스트|
 |status|상태 플래그, status가 0이라면 번역을 적용하지 않음. |
 
+---
 
 ## 자동 업데이트 
 현재의 translate.db는 자동 업데이트 기능이 적용되어 자동적으로 한국어 DB를 적용합니다.<br/>
@@ -84,6 +85,7 @@ CREATE TABLE translate (
 https://github.com/andrew0416/open-batoru-translation-ko 를 참조하여 업데이트 레포지토리를 생성하고.<br/>
 `manifestUrl`의 주소를 해당 레포지토리의 주소로 교체합니다.<br/>
 
+---
 
 ## LICENSE / 라이선스
 MIT LICENSE<br/>
