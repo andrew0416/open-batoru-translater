@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -177,6 +178,8 @@ internal sealed class UpdaterApp
         {
             AutomaticDecompression = DecompressionMethods.All,
             AllowAutoRedirect = true,
+            ClientCertificateOptions = ClientCertificateOption.Manual,
+            SslProtocols = SslProtocols.Tls12,
         };
 
         if (allowInvalidTlsCertificate)
