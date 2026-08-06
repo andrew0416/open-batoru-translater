@@ -52,7 +52,7 @@ internal sealed class UpdaterApp
             Log($"manifest: {config.ManifestUrl}");
             Log($"database: {databasePath}");
 
-            var manifest = await DownloadJsonAsync<TranslateManifest>(config.ManifestUrl, config.TimeoutSeconds);
+            var manifest = await DownloadJsonAsync<TranslateManifest>(config.ManifestUrl, config.TimeoutSeconds, config.AllowInvalidTlsCertificate);
             if (string.IsNullOrWhiteSpace(manifest.Url))
             {
                 throw new InvalidOperationException("manifest does not contain a database url");
@@ -65,7 +65,7 @@ internal sealed class UpdaterApp
             }
 
             Log($"downloading translate.db version {BlankToUnknown(manifest.Version)}");
-            await InstallDatabaseAsync(manifest, databasePath, config.TimeoutSeconds, config.KeepBackup);
+            await InstallDatabaseAsync(manifest, databasePath, config.TimeoutSeconds, config.KeepBackup, config.AllowInvalidTlsCertificate);
 
             await SaveJsonFileAsync(statePath, new UpdateState
             {
@@ -81,7 +81,7 @@ internal sealed class UpdaterApp
         }
         catch (Exception ex)
         {
-            Log(ex.Message);
+            Log(FormatException(ex));
             Log("starting OpenBatoru with the existing translate.db");
         }
 
@@ -123,13 +123,13 @@ internal sealed class UpdaterApp
         return false;
     }
 
-    private async Task InstallDatabaseAsync(TranslateManifest manifest, string databasePath, int timeoutSeconds, bool keepBackup)
+    private async Task InstallDatabaseAsync(TranslateManifest manifest, string databasePath, int timeoutSeconds, bool keepBackup, bool allowInvalidTlsCertificate)
     {
         var tempPath = databasePath + ".download";
         var backupPath = databasePath + ".bak";
         DeleteIfExists(tempPath);
 
-        var bytes = await DownloadBytesAsync(manifest.Url!, timeoutSeconds);
+        var bytes = await DownloadBytesAsync(manifest.Url!, timeoutSeconds, allowInvalidTlsCertificate);
         AssertSqliteDatabase(bytes);
         await File.WriteAllBytesAsync(tempPath, bytes);
 
@@ -152,32 +152,38 @@ internal sealed class UpdaterApp
         File.Move(tempPath, databasePath, overwrite: true);
     }
 
-    private async Task<T> DownloadJsonAsync<T>(string url, int timeoutSeconds)
+    private async Task<T> DownloadJsonAsync<T>(string url, int timeoutSeconds, bool allowInvalidTlsCertificate)
     {
-        var text = await DownloadTextAsync(url, timeoutSeconds);
+        var text = await DownloadTextAsync(url, timeoutSeconds, allowInvalidTlsCertificate);
         var value = JsonSerializer.Deserialize<T>(StripBom(text), JsonOptions());
         return value ?? throw new InvalidOperationException("downloaded JSON is empty");
     }
 
-    private static async Task<string> DownloadTextAsync(string url, int timeoutSeconds)
+    private static async Task<string> DownloadTextAsync(string url, int timeoutSeconds, bool allowInvalidTlsCertificate)
     {
-        using var client = CreateClient(timeoutSeconds);
+        using var client = CreateClient(timeoutSeconds, allowInvalidTlsCertificate);
         return await client.GetStringAsync(url);
     }
 
-    private static async Task<byte[]> DownloadBytesAsync(string url, int timeoutSeconds)
+    private static async Task<byte[]> DownloadBytesAsync(string url, int timeoutSeconds, bool allowInvalidTlsCertificate)
     {
-        using var client = CreateClient(timeoutSeconds);
+        using var client = CreateClient(timeoutSeconds, allowInvalidTlsCertificate);
         return await client.GetByteArrayAsync(url);
     }
 
-    private static HttpClient CreateClient(int timeoutSeconds)
+    private static HttpClient CreateClient(int timeoutSeconds, bool allowInvalidTlsCertificate)
     {
         var handler = new HttpClientHandler
         {
             AutomaticDecompression = DecompressionMethods.All,
             AllowAutoRedirect = true,
         };
+
+        if (allowInvalidTlsCertificate)
+        {
+            handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+        }
+
         var client = new HttpClient(handler)
         {
             Timeout = TimeSpan.FromSeconds(timeoutSeconds <= 0 ? 20 : timeoutSeconds),
@@ -249,6 +255,16 @@ internal sealed class UpdaterApp
         return string.IsNullOrWhiteSpace(value) ? "unknown" : value;
     }
 
+    private static string FormatException(Exception exception)
+    {
+        var messages = new List<string>();
+        for (var current = exception; current != null; current = current.InnerException!)
+        {
+            messages.Add($"{current.GetType().Name}: {current.Message}");
+        }
+        return string.Join(" | ", messages);
+    }
+
     private static void DeleteIfExists(string path)
     {
         if (File.Exists(path))
@@ -280,6 +296,7 @@ internal sealed class UpdaterConfig
     public string DatabasePath { get; set; } = "translate.db";
     public int TimeoutSeconds { get; set; } = 20;
     public bool KeepBackup { get; set; } = true;
+    public bool AllowInvalidTlsCertificate { get; set; }
 }
 
 internal sealed class TranslateManifest
