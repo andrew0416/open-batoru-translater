@@ -2,7 +2,14 @@
 setlocal
 set "PATCH_DIR=%~dp0"
 
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%PATCH_DIR%translate-updater.ps1"
+rem Always resolve the updater, Java runtime, and config from the patch folder.
+pushd "%PATCH_DIR%"
+
+if exist "%PATCH_DIR%translate-updater.exe" (
+  "%PATCH_DIR%translate-updater.exe"
+) else (
+  echo [translate-db] translate-updater.exe was not found. Starting the game without an update check.
+)
 
 "./jdk/bin/java" ^
 -javaagent:"agent.jar" ^
@@ -14,3 +21,6 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%PATCH_DIR%translate-up
 -Dsun.stdout.encoding=UTF-8 ^
 -Dsun.stderr.encoding=UTF-8 ^
 -jar OpenBatoru.jar
+
+popd
+endlocal
