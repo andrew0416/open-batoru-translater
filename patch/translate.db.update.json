@@ -1,0 +1,8 @@
+{
+  "Mode": "manifest",
+  "ManifestUrl": "https://raw.githubusercontent.com/andrew0416/open-batoru-translation-ko/main/translate-manifest.json",
+  "Url": "https://github.com/andrew0416/open-batoru-translation-ko/releases/latest/download/translate.db",
+  "Version": "ko-2026-08-08-04",
+  "Sha256": "670fa0e8371825d7450973eccd6ebc8548b7c0000173bbdd2279c3fcb2298d24",
+  "UpdatedAt": "2026-08-07T19:57:58.4730465\u002B00:00"
+}
