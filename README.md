@@ -88,4 +88,5 @@ https://github.com/andrew0416/open-batoru-translation-ko 를 참조하여 업데
 ---
 
 ## LICENSE / 라이선스
-MIT LICENSE<br/>
+~~MIT LICENSE~~<br/>
+0BSD
